@@ -18,26 +18,26 @@ fn test_321_variable_expansion() {
         UriTemplate::new("{&count*}"),
     ];
 
-    for i in 0..templates.len() {
-        templates[i].set("dub", "me/too");
-        templates[i].set("v", "6");
-        templates[i].set("var", "value");
-        templates[i].set("hello", "Hello World!");
-        templates[i].set("list", &["red", "green", "blue"] as &[&str]);
-        templates[i].set("dom", &["example", "com"] as &[&str]);
-        templates[i].set("count", &["one", "two", "three"] as &[&str]);
-        templates[i].set("half", "50%");
-        templates[i].set("x", "1024");
-        templates[i].set(
+    for template in &mut templates {
+        template.set("dub", "me/too");
+        template.set("v", "6");
+        template.set("var", "value");
+        template.set("hello", "Hello World!");
+        template.set("list", &["red", "green", "blue"] as &[&str]);
+        template.set("dom", &["example", "com"] as &[&str]);
+        template.set("count", &["one", "two", "three"] as &[&str]);
+        template.set("half", "50%");
+        template.set("x", "1024");
+        template.set(
             "keys",
             &[("semi", ";"), ("dot", "."), ("comma", ",")] as &[(&str, &str)],
         );
-        templates[i].set("y", "768");
-        templates[i].set("who", "fred");
-        templates[i].set("empty", "");
-        templates[i].set("path", "/foo/bar");
-        templates[i].set("empty_keys", &[] as &[&str]);
-        templates[i].set("base", "http://example.com/home/");
+        template.set("y", "768");
+        template.set("who", "fred");
+        template.set("empty", "");
+        template.set("path", "/foo/bar");
+        template.set("empty_keys", &[] as &[&str]);
+        template.set("base", "http://example.com/home/");
     }
 
     assert_eq!(templates[0].build(), "one,two,three");
@@ -73,26 +73,26 @@ fn test_322_simple_string_expansion() {
         UriTemplate::new("{keys*}"),
     ];
 
-    for i in 0..templates.len() {
-        templates[i].set("dub", "me/too");
-        templates[i].set("v", "6");
-        templates[i].set("var", "value");
-        templates[i].set("hello", "Hello World!");
-        templates[i].set("list", &["red", "green", "blue"] as &[&str]);
-        templates[i].set("dom", &["example", "com"] as &[&str]);
-        templates[i].set("count", &["one", "two", "three"] as &[&str]);
-        templates[i].set("half", "50%");
-        templates[i].set("x", "1024");
-        templates[i].set(
+    for template in &mut templates {
+        template.set("dub", "me/too");
+        template.set("v", "6");
+        template.set("var", "value");
+        template.set("hello", "Hello World!");
+        template.set("list", &["red", "green", "blue"] as &[&str]);
+        template.set("dom", &["example", "com"] as &[&str]);
+        template.set("count", &["one", "two", "three"] as &[&str]);
+        template.set("half", "50%");
+        template.set("x", "1024");
+        template.set(
             "keys",
             &[("semi", ";"), ("dot", "."), ("comma", ",")] as &[(&str, &str)],
         );
-        templates[i].set("y", "768");
-        templates[i].set("who", "fred");
-        templates[i].set("empty", "");
-        templates[i].set("path", "/foo/bar");
-        templates[i].set("empty_keys", &[] as &[&str]);
-        templates[i].set("base", "http://example.com/home/");
+        template.set("y", "768");
+        template.set("who", "fred");
+        template.set("empty", "");
+        template.set("path", "/foo/bar");
+        template.set("empty_keys", &[] as &[&str]);
+        template.set("base", "http://example.com/home/");
     }
 
     assert_eq!(templates[0].build(), "value");
@@ -154,26 +154,26 @@ fn test_323_reserved_expansion() {
         UriTemplate::new("{+keys*}"),
     ];
 
-    for i in 0..templates.len() {
-        templates[i].set("dub", "me/too");
-        templates[i].set("v", "6");
-        templates[i].set("var", "value");
-        templates[i].set("hello", "Hello World!");
-        templates[i].set("list", &["red", "green", "blue"] as &[&str]);
-        templates[i].set("dom", &["example", "com"] as &[&str]);
-        templates[i].set("count", &["one", "two", "three"] as &[&str]);
-        templates[i].set("half", "50%");
-        templates[i].set("x", "1024");
-        templates[i].set(
+    for template in &mut templates {
+        template.set("dub", "me/too");
+        template.set("v", "6");
+        template.set("var", "value");
+        template.set("hello", "Hello World!");
+        template.set("list", &["red", "green", "blue"] as &[&str]);
+        template.set("dom", &["example", "com"] as &[&str]);
+        template.set("count", &["one", "two", "three"] as &[&str]);
+        template.set("half", "50%");
+        template.set("x", "1024");
+        template.set(
             "keys",
             &[("semi", ";"), ("dot", "."), ("comma", ",")] as &[(&str, &str)],
         );
-        templates[i].set("y", "768");
-        templates[i].set("who", "fred");
-        templates[i].set("empty", "");
-        templates[i].set("path", "/foo/bar");
-        templates[i].set("empty_keys", &[] as &[&str]);
-        templates[i].set("base", "http://example.com/home/");
+        template.set("y", "768");
+        template.set("who", "fred");
+        template.set("empty", "");
+        template.set("path", "/foo/bar");
+        template.set("empty_keys", &[] as &[&str]);
+        template.set("base", "http://example.com/home/");
     }
 
     assert_eq!(templates[0].build(), "value");
@@ -233,26 +233,26 @@ fn test_324_fragment_expansion() {
         UriTemplate::new("{#keys}"),
     ];
 
-    for i in 0..templates.len() {
-        templates[i].set("dub", "me/too");
-        templates[i].set("v", "6");
-        templates[i].set("var", "value");
-        templates[i].set("hello", "Hello World!");
-        templates[i].set("list", &["red", "green", "blue"] as &[&str]);
-        templates[i].set("dom", &["example", "com"] as &[&str]);
-        templates[i].set("count", &["one", "two", "three"] as &[&str]);
-        templates[i].set("half", "50%");
-        templates[i].set("x", "1024");
-        templates[i].set(
+    for template in &mut templates {
+        template.set("dub", "me/too");
+        template.set("v", "6");
+        template.set("var", "value");
+        template.set("hello", "Hello World!");
+        template.set("list", &["red", "green", "blue"] as &[&str]);
+        template.set("dom", &["example", "com"] as &[&str]);
+        template.set("count", &["one", "two", "three"] as &[&str]);
+        template.set("half", "50%");
+        template.set("x", "1024");
+        template.set(
             "keys",
             &[("semi", ";"), ("dot", "."), ("comma", ",")] as &[(&str, &str)],
         );
-        templates[i].set("y", "768");
-        templates[i].set("who", "fred");
-        templates[i].set("empty", "");
-        templates[i].set("path", "/foo/bar");
-        templates[i].set("empty_keys", &[] as &[&str]);
-        templates[i].set("base", "http://example.com/home/");
+        template.set("y", "768");
+        template.set("who", "fred");
+        template.set("empty", "");
+        template.set("path", "/foo/bar");
+        template.set("empty_keys", &[] as &[&str]);
+        template.set("base", "http://example.com/home/");
     }
 
     assert_eq!(templates[0].build(), "#value");
@@ -296,26 +296,26 @@ fn test_325_label_expansion_with_dot_prefix() {
         UriTemplate::new("X{.empty_keys*}"),
     ];
 
-    for i in 0..templates.len() {
-        templates[i].set("dub", "me/too");
-        templates[i].set("v", "6");
-        templates[i].set("var", "value");
-        templates[i].set("hello", "Hello World!");
-        templates[i].set("list", &["red", "green", "blue"] as &[&str]);
-        templates[i].set("dom", &["example", "com"] as &[&str]);
-        templates[i].set("count", &["one", "two", "three"] as &[&str]);
-        templates[i].set("half", "50%");
-        templates[i].set("x", "1024");
-        templates[i].set(
+    for template in &mut templates {
+        template.set("dub", "me/too");
+        template.set("v", "6");
+        template.set("var", "value");
+        template.set("hello", "Hello World!");
+        template.set("list", &["red", "green", "blue"] as &[&str]);
+        template.set("dom", &["example", "com"] as &[&str]);
+        template.set("count", &["one", "two", "three"] as &[&str]);
+        template.set("half", "50%");
+        template.set("x", "1024");
+        template.set(
             "keys",
             &[("semi", ";"), ("dot", "."), ("comma", ",")] as &[(&str, &str)],
         );
-        templates[i].set("y", "768");
-        templates[i].set("who", "fred");
-        templates[i].set("empty", "");
-        templates[i].set("path", "/foo/bar");
-        templates[i].set("empty_keys", &[] as &[&str]);
-        templates[i].set("base", "http://example.com/home/");
+        template.set("y", "768");
+        template.set("who", "fred");
+        template.set("empty", "");
+        template.set("path", "/foo/bar");
+        template.set("empty_keys", &[] as &[&str]);
+        template.set("base", "http://example.com/home/");
     }
 
     assert_eq!(templates[0].build(), ".fred");
@@ -370,26 +370,26 @@ fn test_326_path_segment_expansion() {
         UriTemplate::new("{/keys*}"),
     ];
 
-    for i in 0..templates.len() {
-        templates[i].set("dub", "me/too");
-        templates[i].set("v", "6");
-        templates[i].set("var", "value");
-        templates[i].set("hello", "Hello World!");
-        templates[i].set("list", &["red", "green", "blue"] as &[&str]);
-        templates[i].set("dom", &["example", "com"] as &[&str]);
-        templates[i].set("count", &["one", "two", "three"] as &[&str]);
-        templates[i].set("half", "50%");
-        templates[i].set("x", "1024");
-        templates[i].set(
+    for template in &mut templates {
+        template.set("dub", "me/too");
+        template.set("v", "6");
+        template.set("var", "value");
+        template.set("hello", "Hello World!");
+        template.set("list", &["red", "green", "blue"] as &[&str]);
+        template.set("dom", &["example", "com"] as &[&str]);
+        template.set("count", &["one", "two", "three"] as &[&str]);
+        template.set("half", "50%");
+        template.set("x", "1024");
+        template.set(
             "keys",
             &[("semi", ";"), ("dot", "."), ("comma", ",")] as &[(&str, &str)],
         );
-        templates[i].set("y", "768");
-        templates[i].set("who", "fred");
-        templates[i].set("empty", "");
-        templates[i].set("path", "/foo/bar");
-        templates[i].set("empty_keys", &[] as &[&str]);
-        templates[i].set("base", "http://example.com/home/");
+        template.set("y", "768");
+        template.set("who", "fred");
+        template.set("empty", "");
+        template.set("path", "/foo/bar");
+        template.set("empty_keys", &[] as &[&str]);
+        template.set("base", "http://example.com/home/");
     }
 
     assert_eq!(templates[0].build(), "/fred");
@@ -443,26 +443,26 @@ fn test_327_path_style_parameter_expansion() {
         UriTemplate::new("{;keys*}"),
     ];
 
-    for i in 0..templates.len() {
-        templates[i].set("dub", "me/too");
-        templates[i].set("v", "6");
-        templates[i].set("var", "value");
-        templates[i].set("hello", "Hello World!");
-        templates[i].set("list", &["red", "green", "blue"] as &[&str]);
-        templates[i].set("dom", &["example", "com"] as &[&str]);
-        templates[i].set("count", &["one", "two", "three"] as &[&str]);
-        templates[i].set("half", "50%");
-        templates[i].set("x", "1024");
-        templates[i].set(
+    for template in &mut templates {
+        template.set("dub", "me/too");
+        template.set("v", "6");
+        template.set("var", "value");
+        template.set("hello", "Hello World!");
+        template.set("list", &["red", "green", "blue"] as &[&str]);
+        template.set("dom", &["example", "com"] as &[&str]);
+        template.set("count", &["one", "two", "three"] as &[&str]);
+        template.set("half", "50%");
+        template.set("x", "1024");
+        template.set(
             "keys",
             &[("semi", ";"), ("dot", "."), ("comma", ",")] as &[(&str, &str)],
         );
-        templates[i].set("y", "768");
-        templates[i].set("who", "fred");
-        templates[i].set("empty", "");
-        templates[i].set("path", "/foo/bar");
-        templates[i].set("empty_keys", &[] as &[&str]);
-        templates[i].set("base", "http://example.com/home/");
+        template.set("y", "768");
+        template.set("who", "fred");
+        template.set("empty", "");
+        template.set("path", "/foo/bar");
+        template.set("empty_keys", &[] as &[&str]);
+        template.set("base", "http://example.com/home/");
     }
 
     assert_eq!(templates[0].build(), ";who=fred");
@@ -512,26 +512,26 @@ fn test_328_form_style_query_expansion() {
         UriTemplate::new("{?keys*}"),
     ];
 
-    for i in 0..templates.len() {
-        templates[i].set("dub", "me/too");
-        templates[i].set("v", "6");
-        templates[i].set("var", "value");
-        templates[i].set("hello", "Hello World!");
-        templates[i].set("list", &["red", "green", "blue"] as &[&str]);
-        templates[i].set("dom", &["example", "com"] as &[&str]);
-        templates[i].set("count", &["one", "two", "three"] as &[&str]);
-        templates[i].set("half", "50%");
-        templates[i].set("x", "1024");
-        templates[i].set(
+    for template in &mut templates {
+        template.set("dub", "me/too");
+        template.set("v", "6");
+        template.set("var", "value");
+        template.set("hello", "Hello World!");
+        template.set("list", &["red", "green", "blue"] as &[&str]);
+        template.set("dom", &["example", "com"] as &[&str]);
+        template.set("count", &["one", "two", "three"] as &[&str]);
+        template.set("half", "50%");
+        template.set("x", "1024");
+        template.set(
             "keys",
             &[("semi", ";"), ("dot", "."), ("comma", ",")] as &[(&str, &str)],
         );
-        templates[i].set("y", "768");
-        templates[i].set("who", "fred");
-        templates[i].set("empty", "");
-        templates[i].set("path", "/foo/bar");
-        templates[i].set("empty_keys", &[] as &[&str]);
-        templates[i].set("base", "http://example.com/home/");
+        template.set("y", "768");
+        template.set("who", "fred");
+        template.set("empty", "");
+        template.set("path", "/foo/bar");
+        template.set("empty_keys", &[] as &[&str]);
+        template.set("base", "http://example.com/home/");
     }
 
     assert_eq!(templates[0].build(), "?who=fred");
@@ -578,26 +578,26 @@ fn test_329_form_style_query_continuation() {
         UriTemplate::new("{&keys*}"),
     ];
 
-    for i in 0..templates.len() {
-        templates[i].set("dub", "me/too");
-        templates[i].set("v", "6");
-        templates[i].set("var", "value");
-        templates[i].set("hello", "Hello World!");
-        templates[i].set("list", &["red", "green", "blue"] as &[&str]);
-        templates[i].set("dom", &["example", "com"] as &[&str]);
-        templates[i].set("count", &["one", "two", "three"] as &[&str]);
-        templates[i].set("half", "50%");
-        templates[i].set("x", "1024");
-        templates[i].set(
+    for template in &mut templates {
+        template.set("dub", "me/too");
+        template.set("v", "6");
+        template.set("var", "value");
+        template.set("hello", "Hello World!");
+        template.set("list", &["red", "green", "blue"] as &[&str]);
+        template.set("dom", &["example", "com"] as &[&str]);
+        template.set("count", &["one", "two", "three"] as &[&str]);
+        template.set("half", "50%");
+        template.set("x", "1024");
+        template.set(
             "keys",
             &[("semi", ";"), ("dot", "."), ("comma", ",")] as &[(&str, &str)],
         );
-        templates[i].set("y", "768");
-        templates[i].set("who", "fred");
-        templates[i].set("empty", "");
-        templates[i].set("path", "/foo/bar");
-        templates[i].set("empty_keys", &[] as &[&str]);
-        templates[i].set("base", "http://example.com/home/");
+        template.set("y", "768");
+        template.set("who", "fred");
+        template.set("empty", "");
+        template.set("path", "/foo/bar");
+        template.set("empty_keys", &[] as &[&str]);
+        template.set("base", "http://example.com/home/");
     }
 
     assert_eq!(templates[0].build(), "&who=fred");

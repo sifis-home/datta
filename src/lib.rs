@@ -80,7 +80,7 @@ pub struct VarSpec {
 /// Operator prefixes
 ///
 /// rfc [section-1.2](rfc [section-2.4](https://www.rfc-editor.org/rfc/rfc6570#section-1.2))
-#[derive(PartialEq)]
+#[derive(PartialEq, Eq)]
 pub enum Operator {
     Null,
     Plus,
@@ -118,7 +118,7 @@ fn prefixed(s: &str, prefix: u16) -> String {
 
 fn parse_varlist(varlist: &str) -> TemplateComponent {
     let mut varlist = varlist.to_string();
-    let operator = match varlist.chars().nth(0) {
+    let operator = match varlist.chars().next() {
         Some(ch) => ch,
         None => {
             return TemplateComponent::VarList(Operator::Null, Vec::new());
@@ -137,7 +137,7 @@ fn parse_varlist(varlist: &str) -> TemplateComponent {
     if operator != Operator::Null {
         varlist.remove(0);
     }
-    let varspecs = varlist.split(",");
+    let varspecs = varlist.split(',');
     let mut varspec_list = Vec::new();
     for varspec in varspecs {
         let mut varspec = varspec.to_string();
@@ -150,13 +150,10 @@ fn parse_varlist(varlist: &str) -> TemplateComponent {
             });
             continue;
         }
-        if varspec.contains(":") {
-            let parts: Vec<_> = varspec.splitn(2, ":").collect();
+        if varspec.contains(':') {
+            let parts: Vec<_> = varspec.splitn(2, ':').collect();
             let prefix = u16::from_str(parts[1]).ok();
-            let prefix = match prefix {
-                Some(p) => p,
-                None => 9999u16,
-            };
+            let prefix = prefix.unwrap_or(9999u16);
             varspec_list.push(VarSpec {
                 name: parts[0].to_string(),
                 var_type: VarSpecType::Prefixed(prefix),
@@ -172,11 +169,11 @@ fn parse_varlist(varlist: &str) -> TemplateComponent {
     TemplateComponent::VarList(operator, varspec_list)
 }
 
-fn encode_vec<E>(v: &Vec<String>, encoder: E) -> Vec<String>
+fn encode_vec<E>(v: &[String], encoder: E) -> Vec<String>
 where
     E: Fn(&str) -> String,
 {
-    v.iter().map(|s| encoder(&s)).collect()
+    v.iter().map(|s| encoder(s)).collect()
 }
 
 impl UriTemplate {
@@ -200,7 +197,7 @@ impl UriTemplate {
                 continue;
             }
             if !in_varlist && ch == '{' {
-                if buf.len() > 0 {
+                if !buf.is_empty() {
                     components.push(TemplateComponent::Literal(buf));
                     buf = String::new();
                 }
@@ -210,12 +207,12 @@ impl UriTemplate {
             buf.push(ch);
         }
 
-        if buf.len() > 0 {
+        if !buf.is_empty() {
             components.push(TemplateComponent::Literal(buf));
         }
 
         UriTemplate {
-            components: components,
+            components,
             vars: HashMap::new(),
         }
     }
@@ -261,11 +258,9 @@ impl UriTemplate {
     /// assert_eq!(t.delete("house"), false);
     /// assert_eq!(t.delete("animal"), true);
     /// ```
+    #[inline]
     pub fn delete(&mut self, varname: &str) -> bool {
-        match self.vars.remove(varname) {
-            Some(_) => true,
-            None => false,
-        }
+        self.vars.remove(varname).is_some()
     }
 
     /// Deletes the values of all variables currently set in the `URITemplate`.
@@ -295,7 +290,7 @@ impl UriTemplate {
             TemplateVar::Scalar(ref s) => {
                 if named {
                     res.push_str(&encode_reserved(&v.name));
-                    if s == "" {
+                    if s.is_empty() {
                         res.push_str(ifemp);
                         return Some(res);
                     }
@@ -311,14 +306,14 @@ impl UriTemplate {
                 };
             }
             TemplateVar::List(ref l) => {
-                if l.len() == 0 {
+                if l.is_empty() {
                     return None;
                 }
                 match v.var_type {
                     VarSpecType::Raw | VarSpecType::Prefixed(_) => {
                         if named {
                             res.push_str(&encode_reserved(&v.name));
-                            if l.join("").len() == 0 {
+                            if l.join("").is_empty() {
                                 res.push_str(ifemp);
                                 return Some(res);
                             }
@@ -331,7 +326,7 @@ impl UriTemplate {
                             let pairs: Vec<String> = l
                                 .iter()
                                 .map(|x| {
-                                    let val: String = if x == "" {
+                                    let val: String = if x.is_empty() {
                                         format!("{}{}", &encode_reserved(&v.name), ifemp)
                                     } else {
                                         format!("{}={}", &encode_reserved(&v.name), &encoder(x))
@@ -341,13 +336,13 @@ impl UriTemplate {
                                 .collect();
                             res.push_str(&pairs.join(sep));
                         } else {
-                            res.push_str(&encode_vec(&l, encoder).join(sep));
+                            res.push_str(&encode_vec(l, encoder).join(sep));
                         }
                     }
                 }
             }
             TemplateVar::AssociativeArray(ref a) => {
-                if a.len() == 0 {
+                if a.is_empty() {
                     return None;
                 }
                 match v.var_type {
@@ -369,7 +364,7 @@ impl UriTemplate {
                             let pairs: Vec<String> = a
                                 .iter()
                                 .map(|&(ref k, ref v)| {
-                                    let val: String = if v == "" {
+                                    let val: String = if v.is_empty() {
                                         format!("{}{}", &encode_reserved(k), ifemp)
                                     } else {
                                         format!("{}={}", &encode_reserved(k), &encoder(v))
@@ -414,14 +409,13 @@ impl UriTemplate {
             } else {
                 self.build_varspec(varspec, sep, named, ifemp, encode_unreserved)
             };
-            match built {
-                Some(s) => values.push(s),
-                None => {}
+            if let Some(built) = built {
+                values.push(built);
             }
         }
 
         let mut res = String::new();
-        if values.len() != 0 {
+        if !values.is_empty() {
             res.push_str(first);
             res.push_str(&values.join(sep));
         }

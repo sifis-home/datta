@@ -8,9 +8,9 @@ use datta::UriTemplate;
 fn test_level_1() {
     let mut templates = [UriTemplate::new("{var}"), UriTemplate::new("{hello}")];
 
-    for i in 0..templates.len() {
-        templates[i].set("hello", "Hello World!");
-        templates[i].set("var", "value");
+    for template in &mut templates {
+        template.set("hello", "Hello World!");
+        template.set("var", "value");
     }
 
     assert_eq!(templates[0].build(), "value");
@@ -27,10 +27,10 @@ fn test_level_2() {
         UriTemplate::new("here?ref={+path}"),
     ];
 
-    for i in 0..templates.len() {
-        templates[i].set("path", "/foo/bar");
-        templates[i].set("hello", "Hello World!");
-        templates[i].set("var", "value");
+    for template in &mut templates {
+        template.set("path", "/foo/bar");
+        template.set("hello", "Hello World!");
+        template.set("var", "value");
     }
 
     assert_eq!(templates[0].build(), "value");
@@ -61,13 +61,13 @@ fn test_level_3() {
         UriTemplate::new("{&x,y,empty}"),
     ];
 
-    for i in 0..templates.len() {
-        templates[i].set("empty", "");
-        templates[i].set("var", "value");
-        templates[i].set("y", "768");
-        templates[i].set("path", "/foo/bar");
-        templates[i].set("hello", "Hello World!");
-        templates[i].set("x", "1024");
+    for template in &mut templates {
+        template.set("empty", "");
+        template.set("var", "value");
+        template.set("y", "768");
+        template.set("path", "/foo/bar");
+        template.set("hello", "Hello World!");
+        template.set("x", "1024");
     }
 
     assert_eq!(templates[0].build(), "map?1024,768");
@@ -135,12 +135,12 @@ fn test_level_4() {
         UriTemplate::new("{&keys*}"),
     ];
 
-    for i in 0..templates.len() {
-        templates[i].set("path", "/foo/bar");
-        templates[i].set("hello", "Hello World!");
-        templates[i].set("var", "value");
-        templates[i].set("list", &["red", "green", "blue"] as &[&str]);
-        templates[i].set(
+    for template in &mut templates {
+        template.set("path", "/foo/bar");
+        template.set("hello", "Hello World!");
+        template.set("var", "value");
+        template.set("list", &["red", "green", "blue"] as &[&str]);
+        template.set(
             "keys",
             &[("dot", "."), ("semi", ";"), ("comma", ",")] as &[(&str, &str)],
         );

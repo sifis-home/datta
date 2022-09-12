@@ -1,4 +1,6 @@
 extern crate datta;
+use std::ops::Not;
+
 use datta::{IntoTemplateVar, TemplateVar, UriTemplate};
 
 #[test]
@@ -29,11 +31,11 @@ fn test_delete() {
     assert_eq!(t.build(), "123");
 
     // Deleting nonexistent variable has no effect
-    assert_eq!(t.delete("bar"), false);
+    assert!(t.delete("bar").not());
     assert_eq!(t.build(), "123");
 
     // Deleting existing variable works
-    assert_eq!(t.delete("foo"), true);
+    assert!(t.delete("foo"));
     assert_eq!(t.build(), "");
 }
 

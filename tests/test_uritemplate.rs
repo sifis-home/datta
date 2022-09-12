@@ -1,4 +1,3 @@
-extern crate datta;
 use std::ops::Not;
 
 use datta::{IntoTemplateVar, TemplateVar, UriTemplate};

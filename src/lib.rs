@@ -8,7 +8,6 @@
 //! Variable setting can be chained for nice, clean code.
 //!
 //! ```ignore
-//! extern crate datta;
 //! use datta::UriTemplate;
 //!
 //! let uri = UriTemplate::new("/view/{object:1}/{/object,names}{?query*}")
@@ -48,8 +47,6 @@
 //!
 //! In addition, you can implement `IntoTemplateVar` for your own types. View the
 //! documentation for `IntoTemplateVar` for information on how that works.
-
-extern crate regex;
 
 mod percent_encoding;
 mod templatevar;

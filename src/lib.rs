@@ -1,17 +1,15 @@
-//! `rust-uritemplate` is a Rust implementation of
-//! [RFC6570  - URI Template](http://tools.ietf.org/html/rfc6570) that can
-//! process URI Templates up to and including ones designated as Level 4 by the
-//! specification. It passes all of the tests in the
-//! [uritemplate-test](https://github.com/uri-templates/uritemplate-test) test
-//! suite.
+//! `datta` is a Rust implementation of [RFC6570  - URI
+//! Template](http://tools.ietf.org/html/rfc6570) that can process URI Templates up to and
+//! including ones designated as Level 4 by the specification. It passes all of the tests in the
+//! [uritemplate-test](https://github.com/uri-templates/uritemplate-test) test suite.
 //!
 //! Basic Usage
 //! -----------
 //! Variable setting can be chained for nice, clean code.
 //!
 //! ```ignore
-//! extern crate uritemplate;
-//! use uritemplate::UriTemplate;
+//! extern crate datta;
+//! use datta::UriTemplate;
 //!
 //! let uri = UriTemplate::new("/view/{object:1}/{/object,names}{?query*}")
 //!     .set("object", "lakes")

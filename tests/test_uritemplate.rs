@@ -1,5 +1,5 @@
-extern crate uritemplate;
-use uritemplate::{IntoTemplateVar, TemplateVar, UriTemplate};
+extern crate datta;
+use datta::{IntoTemplateVar, TemplateVar, UriTemplate};
 
 #[test]
 fn test_example() {

@@ -103,21 +103,21 @@ jobs:
       run: |
         cargo test --verbose
 
-    - name: Get coverage data for coveralls
+    - name: Get coverage data for codecov
       run: |
         grcov . --binary-path ./target/debug/ -s . -t lcov --branch \
               --ignore-not-existing --ignore "/*" --ignore "../*" -o lcov.info
 
-    - name: Coveralls upload
-      uses: coverallsapp/github-action@master
+    - name: Codecov upload
+      uses: codecov/codecov-action@v3
       with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        path-to-lcov: lcov.info
+        files: lcov.info
 
     - name: Get total coverage
       run: |
-        grcov . --binary-path ./target/debug/ -t covdir -s . \
-              --token YOUR_COVDIR_TOKEN > covdir.json
+        grcov . --binary-path ./target/debug/ -s . -t covdir --branch \
+              --token YOUR_COVDIR_TOKEN --ignore-not-existing --ignore "/*" \
+              --ignore "../*"  > covdir.json
 
     - name: Evaluate code coverage value
       shell: bash
@@ -176,6 +176,7 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: Cache produced data
+      id: cache-data
       uses: actions/cache@v3
       with:
         path: |
@@ -190,11 +191,12 @@ jobs:
       uses: actions-rs/toolchain@v1
       with:
         toolchain: nightly
-        components: miri
+        components: miri, rust-src
         override: true
 
     # FIXME Use binaries
     - name: Install cargo-fuzz
+      if: steps.cache-data.outputs.cache-hit != 'true'
       run: |
         cargo install cargo-fuzz
 
@@ -221,13 +223,15 @@ jobs:
     - name: Run cargo-fuzz
       run: cargo fuzz build
 
-    # Usage of the `help` command as base command, please replace it
-    # with the effective command that AddressSanitizer has to analyze
     - name: Run AddressSanitizer
       env:
         RUSTFLAGS: -Zsanitizer=address
         RUSTDOCFLAGS: -Zsanitizer=address
-      run: cargo run -Zbuild-std --target x86_64-unknown-linux-gnu -- --help
+      run: cargo test -Zbuild-std --target x86_64-unknown-linux-gnu
+      # Use `cargo run` for the analysis of a binary.
+      # Usage of the `help` command as base command, please replace it
+      # with the effective command that AddressSanitizer has to analyze
+      # run: cargo run -Zbuild-std --target x86_64-unknown-linux-gnu -- --help
 
   static-code-analysis:
 
@@ -320,3 +324,61 @@ jobs:
       with:
         name: weighted-code-coverage-ubuntu
         path: ~/wcc-output/out.json
+
+  dependency-check:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install stable
+      uses: actions-rs/toolchain@v1
+      with:
+        profile: minimal
+        toolchain: stable
+        override: true
+
+    - name: Install nightly
+      uses: actions-rs/toolchain@v1
+      with:
+        profile: minimal
+        toolchain: nightly
+
+    - name: Install cargo-udeps
+      env:
+        UDEPS_LINK: https://github.com/est31/cargo-udeps/releases/download
+        UDEPS_VERSION: v0.1.28
+      run: |
+        curl -L "$UDEPS_LINK/$UDEPS_VERSION/cargo-udeps-$UDEPS_VERSION-x86_64-unknown-linux-gnu.tar.gz" |
+        tar xz -C $HOME/.cargo/bin --strip-components 2
+
+    - name: Install cargo-deny
+      env:
+        DENY_LINK: https://github.com/EmbarkStudios/cargo-deny/releases/download
+        DENY_VERSION: 0.12.0
+      run: |
+        curl -L "$DENY_LINK/$DENY_VERSION/cargo-deny-$DENY_VERSION-x86_64-unknown-linux-musl.tar.gz" |
+        tar xz -C $HOME/.cargo/bin --strip-components 1
+
+    - name: Install cargo-audit
+      env:
+        AUDIT_LINK: https://github.com/rustsec/rustsec/releases/download/cargo-audit%2F
+        AUDIT_VERSION: v0.16.0
+      run: |
+        curl -L "$AUDIT_LINK$AUDIT_VERSION/cargo-audit-x86_64-unknown-linux-musl-$AUDIT_VERSION.tgz" |
+        tar xzv -C $HOME/.cargo/bin --strip-components 1
+
+    - name: Run cargo-udeps
+      run: |
+        cargo +nightly udeps --all-targets
+
+    - name: Run cargo-deny
+      run: |
+        cargo deny init
+        cargo deny check bans
+        # cargo deny check licenses
+
+    - name: Run cargo-audit
+      run: |
+        cargo audit

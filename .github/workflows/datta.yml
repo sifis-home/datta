@@ -1,4 +1,4 @@
-name: datta-compact
+name: datta
 
 on:
   push:

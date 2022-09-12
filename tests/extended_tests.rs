@@ -22,31 +22,31 @@ fn test_additional_examples_1() {
         UriTemplate::new("{?assoc_special_chars*}"),
     ];
 
-    for i in 0..templates.len() {
-        templates[i].set("long", "37.76");
-        templates[i].set("lat", "-122.427");
-        templates[i].set("last.name", "Doe");
-        templates[i].set("token", "12345");
-        templates[i].set("uri", "http://example.org/?uri=http%3A%2F%2Fexample.org%2F");
-        templates[i].set("Stra%C3%9Fe", "Grüner Weg");
-        templates[i].set("Some%20Thing", "foo");
-        templates[i].set("first_name", "John");
-        templates[i].set("random", "šöäŸœñê€£¥‡ÑÒÓÔÕÖ×ØÙÚàáâãäåæçÿ");
-        templates[i].set("geocode", &["37.76", "-122.427"] as &[&str]);
-        templates[i].set(
+    for template in &mut templates {
+        template.set("long", "37.76");
+        template.set("lat", "-122.427");
+        template.set("last.name", "Doe");
+        template.set("token", "12345");
+        template.set("uri", "http://example.org/?uri=http%3A%2F%2Fexample.org%2F");
+        template.set("Stra%C3%9Fe", "Grüner Weg");
+        template.set("Some%20Thing", "foo");
+        template.set("first_name", "John");
+        template.set("random", "šöäŸœñê€£¥‡ÑÒÓÔÕÖ×ØÙÚàáâãäåæçÿ");
+        template.set("geocode", &["37.76", "-122.427"] as &[&str]);
+        template.set(
             "assoc_special_chars",
             &[("šöäŸœñê€£¥‡ÑÒÓÔÕ", "Ö×ØÙÚàáâãäåæçÿ")] as &[(&str, &str)],
         );
-        templates[i].set("id", "person");
-        templates[i].set("number", "6");
-        templates[i].set("q", "URI Templates");
-        templates[i].set("query", "PREFIX dc: <http://purl.org/dc/elements/1.1/> SELECT ?book ?who WHERE { ?book dc:creator ?who }");
-        templates[i].set("word", "drücken");
-        templates[i].set("format", "json");
-        templates[i].set("group_id", "12345");
-        templates[i].set("fields", &["id", "name", "picture"] as &[&str]);
-        templates[i].set("page", "5");
-        templates[i].set("lang", "en");
+        template.set("id", "person");
+        template.set("number", "6");
+        template.set("q", "URI Templates");
+        template.set("query", "PREFIX dc: <http://purl.org/dc/elements/1.1/> SELECT ?book ?who WHERE { ?book dc:creator ?who }");
+        template.set("word", "drücken");
+        template.set("format", "json");
+        template.set("group_id", "12345");
+        template.set("fields", &["id", "name", "picture"] as &[&str]);
+        template.set("page", "5");
+        template.set("lang", "en");
     }
 
     assert_eq!(templates[0].build(), "/person");
@@ -93,16 +93,16 @@ fn test_additional_examples_2() {
         UriTemplate::new("{/id*}{?fields,token}"),
     ];
 
-    for i in 0..templates.len() {
-        templates[i].set("q", "URI Templates");
-        templates[i].set("lang", "en");
-        templates[i].set("format", "atom");
-        templates[i].set("token", "12345");
-        templates[i].set("geocode", &["37.76", "-122.427"] as &[&str]);
-        templates[i].set("fields", &["id", "name", "picture"] as &[&str]);
-        templates[i].set("page", "10");
-        templates[i].set("start", "5");
-        templates[i].set("id", &["person", "albums"] as &[&str]);
+    for template in &mut templates {
+        template.set("q", "URI Templates");
+        template.set("lang", "en");
+        template.set("format", "atom");
+        template.set("token", "12345");
+        template.set("geocode", &["37.76", "-122.427"] as &[&str]);
+        template.set("fields", &["id", "name", "picture"] as &[&str]);
+        template.set("page", "10");
+        template.set("start", "5");
+        template.set("id", &["person", "albums"] as &[&str]);
     }
 
     let template_0_answers = vec!["/person/albums", "/albums/person"];
@@ -136,9 +136,9 @@ fn test_additional_examples_3() {
         UriTemplate::new("{?empty_assoc*}"),
     ];
 
-    for i in 0..templates.len() {
-        templates[i].set("empty_assoc", &[] as &[(&str, &str)]);
-        templates[i].set("empty_list", &[] as &[&str]);
+    for template in &mut templates {
+        template.set("empty_assoc", &[] as &[(&str, &str)]);
+        template.set("empty_list", &[] as &[&str]);
     }
 
     let template_0_answers = vec![""];
@@ -166,16 +166,16 @@ fn test_additional_examples_4() {
         UriTemplate::new("{?german*}"),
     ];
 
-    for i in 0..templates.len() {
-        templates[i].set(
+    for template in &mut templates {
+        template.set(
             "german",
             &[("12", "zwölf"), ("11", "elf")] as &[(&str, &str)],
         );
-        templates[i].set(
+        template.set(
             "42",
             "The Answer to the Ultimate Question of Life, the Universe, and Everything",
         );
-        templates[i].set("1337", &["leet", "as", "it", "can", "be"] as &[&str]);
+        template.set("1337", &["leet", "as", "it", "can", "be"] as &[&str]);
     }
 
     assert_eq!(templates[0].build(), "The%20Answer%20to%20the%20Ultimate%20Question%20of%20Life%2C%20the%20Universe%2C%20and%20Everything");

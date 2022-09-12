@@ -68,7 +68,7 @@ pub trait IntoTemplateVar {
 
 impl IntoTemplateVar for TemplateVar {
     fn into_template_var(self) -> TemplateVar {
-        self.clone()
+        self
     }
 }
 

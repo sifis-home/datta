@@ -140,34 +140,6 @@ jobs:
             exit 1
         fi
 
-  memory-and-threads-dynamic-analysis:
-
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v3
-
-    - name: Install Rust stable
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
-        override: true
-
-    - name: Install valgrind
-      run: |
-        sudo apt-get install valgrind
-
-    # FIXME Use binaries
-    - name: Install cargo-valgrind
-      run: |
-        cargo install cargo-valgrind
-
-    # Usage of the `help` command as base command, please replace it
-    # with the effective command that valgrind has to analyze
-    - name: Run cargo-valgrind
-      run: |
-        cargo valgrind run -- --help
-
   static-code-analysis:
 
     runs-on: ubuntu-latest

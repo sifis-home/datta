@@ -29,7 +29,9 @@ pub enum TemplateVar {
 /// your struct, not the actual struct, unless you intend to move the value
 /// efficiently.
 ///
-/// ```ignore
+/// ```
+/// # use datta::{IntoTemplateVar, TemplateVar};
+/// #
 /// struct Address {
 ///     city: String,
 ///     state: String
@@ -47,7 +49,23 @@ pub enum TemplateVar {
 ///
 /// Now, `Address` variables can be set as `UriTemplate` variables.
 ///
-/// ```ignore
+/// ```
+/// # use datta::{IntoTemplateVar, TemplateVar, UriTemplate};
+/// #
+/// # struct Address {
+/// #     city: String,
+/// #     state: String
+/// # }
+/// #
+/// # impl <'a> IntoTemplateVar for &'a Address {
+/// #     fn into_template_var(self) -> TemplateVar {
+/// #         TemplateVar::AssociativeArray(vec![
+/// #             ("city".to_string(), self.city.clone()),
+/// #             ("state".to_string(), self.state.clone())
+/// #         ])
+/// #     }
+/// # }
+/// #
 /// let address = Address {
 ///     city: "Los Angelos".to_string(),
 ///     state: "California".to_string()

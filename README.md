@@ -5,6 +5,7 @@
 [![Documentation](https://docs.rs/datta/badge.svg)](https://docs.rs/datta/)
 [![dependency status](https://deps.rs/repo/github/sifis-home/datta/status.svg)](https://deps.rs/repo/github/sifis-home/datta)
 [![License](https://img.shields.io/crates/l/datta.svg)](https://github.com/sifis-home/datta/blob/master/LICENSE)
+[![codecov](https://codecov.io/gh/sifis-home/datta/branch/master/graph/badge.svg?token=TSCMNRE3G1)](https://codecov.io/gh/sifis-home/datta)
 
 
 `datta` is a Rust implementation of [RFC6570  - URI
